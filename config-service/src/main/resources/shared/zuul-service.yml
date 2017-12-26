@@ -1,0 +1,19 @@
+zuul:
+  prefix: /api
+  routes:
+    db-service:
+      path: /db-service/**
+      serviceId: db-service
+    stock-service:
+      path: /stock-service/**
+      serviceId: stock-service
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://registry:8100/eureka/
+
+server:
+    port: 8101
