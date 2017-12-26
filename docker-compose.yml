@@ -1,0 +1,51 @@
+version: '3.3'
+services:
+  registry:
+    build: eureka-service
+    restart: always
+    ports:
+      - 8100:8100
+
+  config:
+    build: config-service
+    ports:
+      - 8102:8102
+    restart: always
+    depends_on:
+      - registry
+
+  gateway:
+    build: zuul-service
+    restart: always
+    ports:
+      - 8101:8101
+    depends_on:
+      - config
+
+  stock:
+    build: stock-service
+    restart: always
+    ports:
+      - 8097:8097
+    depends_on:
+      - config
+
+  db:
+    build: db-service
+    restart: always
+    ports:
+      - 8099:8099
+    depends_on:
+      - config
+      - mysql-db
+
+  mysql-db:
+    image: mysql
+    restart: always
+    ports:
+      - 8080:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: stock
+      MYSQL_USER: stock-user
+      MYSQL_PASSWORD: stock-user
