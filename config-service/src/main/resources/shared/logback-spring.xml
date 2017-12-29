@@ -1,0 +1,41 @@
+<configuration>
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:5044</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
+    <springProperty scope="context" name="serviceName" source="spring.application.name"
+                    defaultValue="N/A"/>
+
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/var/log/${serviceName}/application.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>/var/log/${serviceName}/archived/application.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+    </appender>
+
+    <logger name="com.arcosoft" level="debug"
+            additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STASH"/>
+    </logger>
+
+    <root level="error">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STASH"/>
+    </root>
+</configuration>

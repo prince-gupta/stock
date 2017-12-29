@@ -18,3 +18,7 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://registry:8100/eureka/
+
+management:
+  security:
+    enabled: false

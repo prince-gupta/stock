@@ -17,3 +17,7 @@ eureka:
 
 server:
     port: 8101
+
+
+logging:
+  config: http://config:8102/stock-service/default/master/logback-spring.xml
